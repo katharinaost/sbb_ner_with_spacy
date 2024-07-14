@@ -73,7 +73,7 @@ try:
     with open(sys.argv[1], "r", encoding="utf-8") as f:
         text_de = f.read()
 except OSError:
-    raise SystemExit('Could not open/read file: %s' % reference)
+    raise SystemExit('Could not open/read file: %s' % sys.argv[1])
 
 nlp_model_de = spacy.load("de_core_news_sm", disable = ['ner'])
 nlp_model_de.add_pipe("sbb_ned", config={"api_ner": "http://127.0.0.1:5000"})
