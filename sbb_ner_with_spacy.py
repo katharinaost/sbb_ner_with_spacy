@@ -13,11 +13,11 @@ def previous_and_next(some_iterable):
     nexts = chain(islice(nexts, 1, None), [None])
     return zip(prevs, items, nexts)
 
-@Language.factory("sbb_ned", default_config={"api_ner": None, "model_id": 1})
-def sbb_ned(nlp: Language, name: str, api_ner: str, model_id: int):
-    return SBBNedComponent(nlp, api_ner, model_id)
+@Language.factory("sbb_ner", default_config={"api_ner": None, "model_id": 1})
+def sbb_ner(nlp: Language, name: str, api_ner: str, model_id: int):
+    return SBBNerComponent(nlp, api_ner, model_id)
 
-class SBBNedComponent:
+class SBBNerComponent:
     def __init__(self, nlp: Language, api_ner: str, model_id: int):
         self.api_ner = api_ner
         self.model_id = model_id
@@ -76,7 +76,7 @@ except OSError:
     raise SystemExit('Could not open/read file: %s' % sys.argv[1])
 
 nlp_model_de = spacy.load("de_core_news_sm", disable = ['ner'])
-nlp_model_de.add_pipe("sbb_ned", config={"api_ner": "http://127.0.0.1:5000"})
+nlp_model_de.add_pipe("sbb_ner", config={"api_ner": "http://127.0.0.1:5000"})
 doc_de = nlp_model_de(text_de)
 
 spacy.displacy.serve(doc_de, style="ent")
