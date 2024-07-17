@@ -1,8 +1,6 @@
-import sys
 import requests
 import json
 from itertools import tee, islice, chain
-import spacy
 from spacy.language import Language
 from spacy.tokens import Doc
 
@@ -15,9 +13,9 @@ def previous_and_next(some_iterable):
 
 @Language.factory("sbb_ner", default_config={"api_ner": None, "model_id": 1})
 def sbb_ner(nlp: Language, name: str, api_ner: str, model_id: int):
-    return SBBNerComponent(nlp, api_ner, model_id)
+    return SBBNERComponent(nlp, api_ner, model_id)
 
-class SBBNerComponent:
+class SBBNERComponent:
     def __init__(self, nlp: Language, api_ner: str, model_id: int):
         self.api_ner = api_ner
         self.model_id = model_id
@@ -68,15 +66,3 @@ class SBBNerComponent:
                 character_count += i
         doc.ents = spans
         return doc
-
-try:
-    with open(sys.argv[1], "r", encoding="utf-8") as f:
-        text_de = f.read()
-except OSError:
-    raise SystemExit('Could not open/read file: %s' % sys.argv[1])
-
-nlp_model_de = spacy.load("de_core_news_sm", disable = ['ner'])
-nlp_model_de.add_pipe("sbb_ner", config={"api_ner": "http://127.0.0.1:5000"})
-doc_de = nlp_model_de(text_de)
-
-spacy.displacy.serve(doc_de, style="ent")
