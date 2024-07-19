@@ -62,7 +62,8 @@ class SBBNERComponent:
                     if next_word["prediction"].startswith("B") or next_word["prediction"].startswith("O"):
                         # end of current ner tag
                         end_character=character_count+empty_chars+len(current_word["word"])
-                        spans.append(doc.char_span(start_character, end_character, label=current_word["prediction"][2:]))
+                        span = doc.char_span(start_character, end_character, label=current_word["prediction"][2:], alignment_mode="expand")
+                        spans.append(span)
                 character_count += i
         doc.ents = spans
         return doc
